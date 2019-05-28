@@ -10,11 +10,13 @@ expect that the request contains a field name data which is an array containning
 '''
 @app.route("/", methods=['POST'])
 def predict():
-    data = request.get_json(force=True)['data']
+    body = request.get_json(force=True)
+    data = body['data']
+    periods = body['periods'] if 'periods' in body else 365
     df = pd.io.json.json_normalize(data)
     m = Prophet()
     m.fit(df)
-    future = m.make_future_dataframe(periods=365)[-365:]
+    future = m.make_future_dataframe(periods=periods)[-periods:]
     forecast = m.predict(future)
     return forecast.to_json(orient='records')
 
