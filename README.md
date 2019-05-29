@@ -1,6 +1,6 @@
-# Alakazam
+# [Alakazam](https://whrrmydragons.github.io/Alakazam/)
 REST Wrap to fbprophet
-
+[https://whrrmydragons.github.io/Alakazam/](https://whrrmydragons.github.io/Alakazam/)
 ![alt text](https://static.pokemonpets.com/images/monsters-images-300-300/8065-Mega-Alakazam.png "Alakazam")
 
 ---
