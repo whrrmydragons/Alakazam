@@ -1,6 +1,8 @@
 # Alakazam
 REST Wrap to fbprophet
 
+![alt text](https://static.pokemonpets.com/images/monsters-images-300-300/8065-Mega-Alakazam.png "Alakazam")
+
 ---
 
 # Getting Started
