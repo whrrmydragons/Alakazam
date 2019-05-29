@@ -19,6 +19,8 @@ def predict():
     #get the periods parameter from the body
     #if its undefined its default value will be 365 steps 
     periods = body['periods'] if 'periods' in body else 365
+    #flag to disableDiagnosis
+    disable_diagnosis = body['disable_diagnosis']=="true" if 'disable_diagnosis' in body else True
     #turn the data recieved into a dataframe
     df = pd.io.json.json_normalize(data)
     #instinciate model
@@ -35,18 +37,21 @@ def predict():
     #TODO: turn this code for the default option and add
     #TODO: options to configure cv
     #TODO: also add option to not run diagnostic because it can be very slow
-    df_cv = cross_validation(m,initial=str(len(data)/2)+" days",horizon=str(len(data)/2)+" days")
-    cv = df_cv.to_json(orient='records')
-    # df_p = performance_metrics(df_cv)
-    # performance =df_p.to_json(orient='records')
     ret = {}
     ret['forcast'] = json.loads(forecast)
-    ret['cross_validation'] = json.loads(cv)
-    # ret['performance'] = json.loads(performance)
+    if not disable_diagnosis:
+        diagnostic(m=m,data=data,ret=ret)
     return jsonify(ret)
 
 
-
+def diagnostic(m,data,ret):
+    df_cv = cross_validation(m,initial=str(len(data)/2)+" days",horizon=str(len(data)/2)+" days")
+    cv = df_cv.to_json(orient='records')
+    df_p = performance_metrics(df_cv)
+    performance =df_p.to_json(orient='records')
+    ret['cross_validation'] = json.loads(cv)
+    ret['performance'] = json.loads(performance)
+    return ret
 
 
 
