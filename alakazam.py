@@ -36,7 +36,6 @@ def predict():
 
     #TODO: turn this code for the default option and add
     #TODO: options to configure cv
-    #TODO: also add option to not run diagnostic because it can be very slow
     ret = {}
     ret['forcast'] = json.loads(forecast)
     if not disable_diagnosis:
