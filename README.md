@@ -7,7 +7,7 @@ REST Wrap to fbprophet
 
 # Getting Started
 You can either use:
-* the provided docker compose (build localy or pull from dockerhub) 
+* the provided docker compose (build localy or pull from [dockerhub](https://hub.docker.com/r/rabiran/alakazam)) 
 * use a python environment with pandas flask and fbprophet.
 
 ----
