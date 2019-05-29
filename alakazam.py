@@ -1,5 +1,7 @@
 import pandas  as pd
+import json
 from fbprophet import Prophet
+from fbprophet.diagnostics import cross_validation,performance_metrics
 from flask import jsonify,Flask,request
 app = Flask(__name__)
 
@@ -28,7 +30,20 @@ def predict():
     #calculate future predictions a.k.a forecast
     forecast = m.predict(future)
     #return the forecast/prediction
-    return forecast.to_json(orient='records')
+    forecast = forecast.to_json(orient='records')
+
+    #TODO: turn this code for the default option and add
+    #TODO: options to configure cv
+    #TODO: also add option to not run diagnostic because it can be very slow
+    df_cv = cross_validation(m,initial=str(len(data)/2)+" days",horizon=str(len(data)/2)+" days")
+    cv = df_cv.to_json(orient='records')
+    # df_p = performance_metrics(df_cv)
+    # performance =df_p.to_json(orient='records')
+    ret = {}
+    ret['forcast'] = json.loads(forecast)
+    ret['cross_validation'] = json.loads(cv)
+    # ret['performance'] = json.loads(performance)
+    return jsonify(ret)
 
 
 
