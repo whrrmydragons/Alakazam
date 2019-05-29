@@ -34,17 +34,28 @@ def predict():
     #return the forecast/prediction
     forecast = forecast.to_json(orient='records')
 
-    #TODO: turn this code for the default option and add
-    #TODO: options to configure cv
     ret = {}
     ret['forcast'] = json.loads(forecast)
     if not disable_diagnosis:
-        diagnostic(m=m,data=data,ret=ret)
+        diagnostic(m=m,body=body,ret=ret)
     return jsonify(ret)
 
-
-def diagnostic(m,data,ret):
-    df_cv = cross_validation(m,initial=str(len(data)/2)+" days",horizon=str(len(data)/2)+" days")
+#need 2 supply at least cv_horizon and cv_initial
+def diagnostic(m,body,ret):
+    #both parameters should be of the form <int> days/timeunit by timedelta
+    cv_horizon = body['cv_horizon']
+    cv_period = body['cv_period'] if 'cv_period' in body else False
+    # cv_period = body['cv_period'] 
+    #The initial period should be long enough to capture all 
+    #of the components of the model,
+    #in particular seasonalities and extra regressors: 
+    #at least a year for yearly seasonality,
+    #at least a week for weekly seasonality, etc.
+    cv_initial = body['cv_initial']
+    cv_args ={'initial':cv_initial,'horizon':cv_horizon}
+    if cv_period:
+        cv_args['period']=cv_period
+    df_cv = cross_validation(m,**cv_args)
     cv = df_cv.to_json(orient='records')
     df_p = performance_metrics(df_cv)
     performance =df_p.to_json(orient='records')
