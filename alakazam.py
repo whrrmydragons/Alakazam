@@ -19,12 +19,14 @@ def predict():
     #get the periods parameter from the body
     #if its undefined its default value will be 365 steps 
     periods = body['periods'] if 'periods' in body else 365
+    #create holidays
+    holidays = createHolidays(body['holidays']) if 'holidays' in body else []
     #flag to disableDiagnosis
     disable_diagnosis = body['disable_diagnosis']=="true" if 'disable_diagnosis' in body else True
     #turn the data recieved into a dataframe
     df = pd.io.json.json_normalize(data)
     #instinciate model
-    m = Prophet()
+    m = Prophet(holidays=holidays)
     #train/fit the model
     m.fit(df)
     #make a dataframe of future dates whos prediction we want to return to the user
@@ -63,7 +65,18 @@ def diagnostic(m,body,ret):
     ret['performance'] = json.loads(performance)
     return ret
 
+def createHolidays(holidays):
+    holidays = [createHoliday(holiday) for holiday in holidays]
+    holidays = pd.concat(holidays)
+    return holidays
 
+def createHoliday(holiday):
+    return pd.DataFrame({
+        'holiday': holiday['holiday'],
+        'ds':pd.to_datetime(holiday['ds']),
+        'lower_window': holiday['lower_window'] if 'lower_window' in holiday else 0,
+        'upper_window': holiday['upper_window'] if 'upper_window' in holiday else 1,
+    })
 
 
 if __name__ == '__main__':
