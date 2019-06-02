@@ -30,7 +30,7 @@ python alakazam.py
 the server runs on 8080
 </script></section></section><section ><section data-markdown><script type="text/template">
 # Routes
-Currently there is only a single route "post /".
+Currently there is only a single route "post http://alakazam_url_or_ip:8080/".
 </script></section><section data-markdown><script type="text/template">## Request Parameters
 | Name  | Required |Description |
 | ------------- | ------------- |------------- |
@@ -42,7 +42,10 @@ Currently there is only a single route "post /".
 | cv_horizon  | &#9745; IFF disable_diagnosis is false  |cross validation forecast horizon  |
 | cv_initial  | &#9745; IFF disable_diagnosis is false  |he size of the initial training period  |
 | cv_period  | &#9744;   |the spacing between cutoff dates  |
-</script></section></section></div>
+</script></section><section data-markdown><script type="text/template">
+| Name  | Required |Description |
+| ------------- | ------------- |------------- |
+| holidays  | &#9744; |Array of holidays objects, each of the following structure {"holiday": "holiday_name","ds": ["2010-02-07", "2014-02-02", "2016-02-07","2016-01-20""2016-01-21","2016-01-22"],"lower_window": 0,"upper_window": 1}}  |</script></section></section></div>
     </div>
 
     <script src="./lib/js/head.min.js"></script>
