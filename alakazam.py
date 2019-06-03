@@ -9,7 +9,12 @@ static_file_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'doc
 
 app = Flask(__name__,static_folder=static_file_dir,static_url_path='')
 
+#Environment Variables
 port = os.environ['PORT'] if 'PORT' in os.environ else 8080
+debug = os.environ['DEBUG']=="true" if 'DEBUG' in os.environ else True
+
+#Routes
+
 
 @app.route("/",methods=['GET'])
 def serve_reveal():
@@ -90,4 +95,4 @@ def createHoliday(holiday):
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0',port=port,debug=True)
+    app.run(host='0.0.0.0',port=port,debug=debug)
