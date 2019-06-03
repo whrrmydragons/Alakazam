@@ -7,6 +7,10 @@ from flask import jsonify,Flask,request,send_from_directory
 
 static_file_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'docs')
 
+#helper functions
+def getField(body,field_name,default_value):
+    return body[field_name] if field_name in body else default_value
+
 app = Flask(__name__,static_folder=static_file_dir,static_url_path='')
 
 #Environment Variables
@@ -30,18 +34,23 @@ def predict():
     #get the parsed request`s body
     body = request.get_json(force=True)
     #get the data parameter from the body
-    data = body['data']
+    data = getField(body=body,field_name="data",default_value=[])
     #get the periods parameter from the body
     #if its undefined its default value will be 365 steps 
-    periods = body['periods'] if 'periods' in body else 365
+    periods = getField(body=body,field_name='periods',default_value=365)
     #create holidays
-    holidays = createHolidays(body['holidays']) if 'holidays' in body else []
+    holidays = createHolidays(getField(body=body,field_name='holidays',default_value=[]))
+    #create custom Seasonalities if provided
+    seasonalities = getField(body=body,field_name='seasonalities',default_value=[])
     #flag to disableDiagnosis
     disable_diagnosis = body['disable_diagnosis']=="true" if 'disable_diagnosis' in body else True
     #turn the data recieved into a dataframe
     df = pd.io.json.json_normalize(data)
     #instinciate model
-    m = Prophet(holidays=holidays)
+    #TODO: change to argument dictionary like in diagnostic
+    m = Prophet(holidays=holidays) if len(holidays)>0 else Prophet()
+    #if provided seasonalitied add them to the model before calling fit
+    addSeasonalities(m,seasonalities)
     #train/fit the model
     m.fit(df)
     #make a dataframe of future dates whos prediction we want to return to the user
@@ -82,7 +91,8 @@ def diagnostic(m,body,ret):
 
 def createHolidays(holidays):
     holidays = [createHoliday(holiday) for holiday in holidays]
-    holidays = pd.concat(holidays)
+    if len(holidays)>0:
+        holidays = pd.concat(holidays)
     return holidays
 
 def createHoliday(holiday):
@@ -92,7 +102,12 @@ def createHoliday(holiday):
         'lower_window': holiday['lower_window'] if 'lower_window' in holiday else 0,
         'upper_window': holiday['upper_window'] if 'upper_window' in holiday else 1,
     })
-
+def addSeasonalities(m,seasonalities):
+    for seasonality in seasonalities:
+        name = seasonality['name']
+        period = seasonality['period']
+        fourier_order = seasonality['fourier_order'] if 'fourier_order' in seasonality else 5
+        m.add_seasonality(name=name, period=period, fourier_order=fourier_order)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0',port=port,debug=debug)

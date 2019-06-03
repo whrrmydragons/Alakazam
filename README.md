@@ -43,3 +43,9 @@ Currently there is only a single route "post http://alakazam_url_or_ip:8080/".
 | Name  | Required |Description |
 | ------------- | ------------- |------------- |
 | holidays  | &#9744; |Array of holidays objects, each of the following structure {"holiday": "holiday_name","ds": ["2010-02-07", "2014-02-02", "2016-02-07","2016-01-20""2016-01-21","2016-01-22"],"lower_window": 0,"upper_window": 1}}  |
+
+----
+
+| Name  | Required |Description |
+| ------------- | ------------- |------------- |
+| seasonalities  | &#9744; |Array of Seasonalities each is an object of the following structure {"name":"season_name","period":(numeric_value),"fourier_order"(positive integer)}. If fourier_order default value is 5, name and period are required |
