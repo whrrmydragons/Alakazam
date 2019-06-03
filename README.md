@@ -1,7 +1,7 @@
 # [Alakazam](https://whrrmydragons.github.io/Alakazam/)
 REST Wrap for fbprophet
-[https://whrrmydragons.github.io/Alakazam/](https://whrrmydragons.github.io/Alakazam/)
-![alt text](./alakazam_animated.svg "Alakazam")
+
+<img src="https://whrrmydragons.github.io/Alakazam/alakazam_animated%20.svg" alt="drawing" width="30%" height="10%"/>
 
 ---
 
