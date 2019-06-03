@@ -1,9 +1,19 @@
 import pandas  as pd
+import os
 import json
 from fbprophet import Prophet
 from fbprophet.diagnostics import cross_validation,performance_metrics
-from flask import jsonify,Flask,request
-app = Flask(__name__)
+from flask import jsonify,Flask,request,send_from_directory
+
+static_file_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'docs')
+
+app = Flask(__name__,static_folder=static_file_dir,static_url_path='')
+
+port = os.environ['PORT'] if 'PORT' in os.environ else 8080
+
+@app.route("/",methods=['GET'])
+def serve_reveal():
+    return send_from_directory(static_file_dir, 'index.html')
 
 
 '''
@@ -80,4 +90,4 @@ def createHoliday(holiday):
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0',port=8080,debug=True)
+    app.run(host='0.0.0.0',port=port,debug=True)
