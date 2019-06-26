@@ -51,7 +51,7 @@ def predict():
     df['floor'] = 0
     #instinciate model
     #TODO: change to argument dictionary like in diagnostic
-    m = Prophet(daily_seasonality=False,yearly_seasonality=False,weekly_seasonality=False,holidays=holidays) if len(holidays)>0 else Prophet()
+    m = Prophet(daily_seasonality=False,yearly_seasonality=False,weekly_seasonality=False,holidays=holidays) if len(holidays)>0 else Prophet(daily_seasonality=False,yearly_seasonality=False,weekly_seasonality=False)
     #if provided seasonalitied add them to the model before calling fit
     addSeasonalities(m,seasonalities)
     #train/fit the model
