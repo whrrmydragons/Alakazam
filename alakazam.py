@@ -46,9 +46,12 @@ def predict():
     disable_diagnosis = body['disable_diagnosis']=="true" if 'disable_diagnosis' in body else True
     #turn the data recieved into a dataframe
     df = pd.io.json.json_normalize(data)
+    #TODO get this as a flag/variable
+    #set floor
+    df['floor'] = 0
     #instinciate model
     #TODO: change to argument dictionary like in diagnostic
-    m = Prophet(holidays=holidays) if len(holidays)>0 else Prophet()
+    m = Prophet(daily_seasonality=False,yearly_seasonality=False,weekly_seasonality=False,holidays=holidays) if len(holidays)>0 else Prophet()
     #if provided seasonalitied add them to the model before calling fit
     addSeasonalities(m,seasonalities)
     #train/fit the model
@@ -62,6 +65,7 @@ def predict():
 
     ret = {}
     ret['forcast'] = json.loads(forecast)
+    
     if not disable_diagnosis:
         diagnostic(m=m,body=body,ret=ret)
     return jsonify(ret)

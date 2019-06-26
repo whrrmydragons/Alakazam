@@ -6,7 +6,7 @@
 #FROM python:alpine
 
 # If you prefer miniconda:
-FROM continuumio/miniconda
+FROM continuumio/miniconda3
 
 LABEL Name=alakazam Version=0.0.1
 EXPOSE 8080
