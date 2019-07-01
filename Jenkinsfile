@@ -6,9 +6,10 @@ def PORT="8080"
 node {
 
     stage('Initialize'){
-        def dockerHome = tool 'myDocker'
+        sh "echo Initialize stage"
+        // def dockerHome = tool 'myDocker'
         // def mavenHome  = tool 'myMaven'
-        env.PATH = "${dockerHome}/bin:${env.PATH}"
+        // env.PATH = "${dockerHome}/bin:${env.PATH}"
     }
 
     // stage('Checkout') {
