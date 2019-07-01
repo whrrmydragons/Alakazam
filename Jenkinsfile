@@ -3,7 +3,7 @@ def CONTAINER_TAG="latest"
 def DOCKER_HUB_USER="XYZ"
 def PORT="8080"
 
-node('jenkins-build-slave') {
+node() {
 
     stage('Initialize'){
         sh "echo Initialize stage"
@@ -34,13 +34,17 @@ node('jenkins-build-slave') {
     // }
 
     stage('Image Build'){
+        container('jenkins-build-slave'){
         imageBuild(CONTAINER_NAME, CONTAINER_TAG)
+        }
     }
 
     stage('Push to Docker Registry'){
+        container('jenkins-build-slave'){
         def DOCKER = credentials('jenkins-bitbucket-common-creds')
         // withCredentials([usernamePassword(credentialsId: 'dockerHubAccount', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
             pushToImage(CONTAINER_NAME, CONTAINER_TAG, DOCKER_USR, DOCKER_PSW)
+        }
         // }
     }
 
