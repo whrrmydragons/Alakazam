@@ -62,8 +62,8 @@ node('jenkins-build-slave') {
 // }
 
 def imageBuild(containerName, tag){
-    sh "ls"
-    // sh "docker build -t $containerName:$tag  -t $containerName --pull --no-cache ."
+    // sh "ls"
+    sh "docker build -t $containerName:$tag  -t $containerName --pull --no-cache ."
     echo "Image build complete"
 }
 
