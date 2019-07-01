@@ -34,17 +34,13 @@ node('jenkins-build-slave') {
     // }
 
     stage('Image Build'){
-        container('jenkins-build-slave'){
         imageBuild(CONTAINER_NAME, CONTAINER_TAG)
-        }
     }
 
     stage('Push to Docker Registry'){
-        container('jenkins-build-slave'){
         def DOCKER = credentials('jenkins-bitbucket-common-creds')
         // withCredentials([usernamePassword(credentialsId: 'dockerHubAccount', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
             pushToImage(CONTAINER_NAME, CONTAINER_TAG, DOCKER_USR, DOCKER_PSW)
-        }
         // }
     }
 
