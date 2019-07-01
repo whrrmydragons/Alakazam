@@ -13,9 +13,9 @@ node('jenkins-build-slave') {
         // env.PATH = "${dockerHome}/bin:${env.PATH}"
     }
 
-    // stage('Checkout') {
-    //     checkout scm
-    // }
+    stage('Checkout') {
+        checkout scm
+    }
 
     // stage('Build'){
     //     sh "mvn clean install"
