@@ -35,6 +35,7 @@ node('jenkins-build-slave') {
 
     stage('Image Build'){
         container('jenkins-build-slave'){
+            sh "ls"
         imageBuild(CONTAINER_NAME, CONTAINER_TAG)
         }
     }
