@@ -7,6 +7,7 @@ node {
 
     stage('Initialize'){
         sh "echo Initialize stage"
+        
         // def dockerHome = tool 'myDocker'
         // def mavenHome  = tool 'myMaven'
         // env.PATH = "${dockerHome}/bin:${env.PATH}"
@@ -37,9 +38,10 @@ node {
     }
 
     stage('Push to Docker Registry'){
-        withCredentials([usernamePassword(credentialsId: 'dockerHubAccount', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
-            pushToImage(CONTAINER_NAME, CONTAINER_TAG, USERNAME, PASSWORD)
-        }
+        def DOCKER = credentials('jenkins-bitbucket-common-creds')
+        // withCredentials([usernamePassword(credentialsId: 'dockerHubAccount', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+            pushToImage(CONTAINER_NAME, CONTAINER_TAG, DOCKER_USR, DOCKER_PSW)
+        // }
     }
 
     // stage('Run App'){
