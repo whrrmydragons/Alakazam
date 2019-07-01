@@ -41,9 +41,9 @@ node('jenkins-build-slave') {
 
     stage('Push to Docker Registry'){
         container('jenkins-build-slave'){
-        def DOCKER = credentials('1c28ea49-d7da-4180-8598-645b549709d3')
-        // withCredentials([usernamePassword(credentialsId: 'dockerHubAccount', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
-            pushToImage(CONTAINER_NAME, CONTAINER_TAG, DOCKER_USR, DOCKER_PSW)
+        // def DOCKER = credentials('1c28ea49-d7da-4180-8598-645b549709d3')
+        withCredentials([usernamePassword(credentialsId: '1c28ea49-d7da-4180-8598-645b549709d3', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+            pushToImage(CONTAINER_NAME, CONTAINER_TAG, USERNAME, PASSWORD)
         }
         // }
     }
