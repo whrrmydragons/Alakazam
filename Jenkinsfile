@@ -35,7 +35,6 @@ node('jenkins-build-slave') {
 
     stage('Image Build'){
         container('jenkins-build-slave'){
-            sh "ls"
         imageBuild(CONTAINER_NAME, CONTAINER_TAG)
         }
     }
@@ -63,7 +62,8 @@ node('jenkins-build-slave') {
 // }
 
 def imageBuild(containerName, tag){
-    sh "docker build -t $containerName:$tag  -t $containerName --pull --no-cache ."
+    sh "ls"
+    // sh "docker build -t $containerName:$tag  -t $containerName --pull --no-cache ."
     echo "Image build complete"
 }
 
