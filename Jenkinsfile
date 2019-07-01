@@ -3,7 +3,7 @@ def CONTAINER_TAG="latest"
 def DOCKER_HUB_USER="XYZ"
 def PORT="8080"
 
-node('master') {
+node('jenkins-build-slave') {
 
     stage('Initialize'){
         sh "echo Initialize stage"
