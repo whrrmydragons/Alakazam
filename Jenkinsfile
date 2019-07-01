@@ -45,7 +45,7 @@ node('jenkins-build-slave') {
         withCredentials([usernamePassword(credentialsId: '1c28ea49-d7da-4180-8598-645b549709d3', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
             pushToImage(CONTAINER_NAME, CONTAINER_TAG, USERNAME, PASSWORD)
         }
-        // }
+        }
     }
 
     // stage('Run App'){
