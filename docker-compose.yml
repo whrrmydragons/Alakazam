@@ -1,8 +1,8 @@
 version:  '2.1'
 
 services:
-  fast-api-test:
-    image:  fast-api-test
+  alakazam:
+    image:  rabiran/alakazam
     build:  .
     volumes:
       - ./:/app
