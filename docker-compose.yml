@@ -1,10 +1,10 @@
-version: '2.1'
+version:  '2.1'
 
 services:
-  alakazam:
-    image: alakazam
-    build: .
-    volumes: 
+  fast-api-test:
+    image:  fast-api-test
+    build:  .
+    volumes:
       - ./:/app
     ports:
-      - 8080:8080
+      - 80:80

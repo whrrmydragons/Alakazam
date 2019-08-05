@@ -1,7 +1,7 @@
 def CONTAINER_NAME="alakazam"
 def CONTAINER_TAG="latest"
 def DOCKER_HUB_USER="XYZ"
-def PORT="8080"
+def PORT="80"
 
 node('jenkins-build-slave') {
 
