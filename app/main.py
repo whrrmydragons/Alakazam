@@ -41,7 +41,7 @@ app.mount("/static", StaticFiles(directory="app/static"), name="static")
 
 @app.get("/")
 async def alakazam():
-    response = RedirectResponse(url='/static/alakazam.svg')
+    response = RedirectResponse(url='/static/index.html')
     return response
 
 @app.get("/isalive")
@@ -85,7 +85,7 @@ async def predict(body:Predict):
     forecast = forecast.to_json(orient='records')
 
     ret = {}
-    ret['forcast'] = json.loads(forecast)
+    ret['forecast'] = json.loads(forecast)
     
     # if not disable_diagnosis:
     #     diagnostic(m=m,body=body,ret=ret)
