@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Alakazam Demo</title>
+
+  <!-- CSS  -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+  <link href="css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+</head>
+<body>
+  <nav class="white" role="navigation">
+    <div class="nav-wrapper container">
+      <a id="logo-container" href="#" class="brand-logo">Alakazam Demo</a>
+      <ul class="right hide-on-med-and-down">
+        <li><a href="/docs">Docs</a></li>
+        <li><a href="/redoc">ReDoc</a></li>
+      </ul>
+
+      <ul id="nav-mobile" class="sidenav">
+        <li><a href="/docs">Docs</a></li>
+        <li><a href="/redoc">ReDoc</a></li>
+      </ul>
+      <a href="#" data-target="nav-mobile" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+    </div>
+  </nav>
+
+  <div id="index-banner" class="parallax-container">
+    <div class="section no-pad-bot">
+      <div class="container">
+        <br><br>
+        <h1 class="header center teal-text text-lighten-2">A REST wrapper for <a style="text-decoration:none;color: #4db6ac !important" href="https://facebook.github.io/prophet/">fbprophet</a></h1>
+        <br><br>
+
+      </div>
+    </div>
+    <div  class="parallax"><img src="vectorpaint.svg" alt="Unsplashed background img 1"></div>
+  </div>
+
+
+  
+    <div class="section">
+
+      <!--   Icon Section   -->
+      <div class="row">
+        <div class="col s12 m3">
+          <div class="icon-block">
+            <h2 class="center brown-text"><i class="material-icons">input</i></h2>
+            <h5 class="center">Sample Data</h5>
+
+            <table>
+                <thead>
+                  <tr>
+                      <th>ds</th>
+                      <th>y</th>
+                  </tr>
+                </thead>
+        
+                <tbody>
+                  <tr>
+                    <td>2007-12-10</td>
+                    <td>9.59076113897809</td>
+                  </tr>
+                  <tr>
+                    <td>2007-12-11</td>
+                    <td>8.51959031601596</td>
+                  </tr>
+                  <tr>
+                    <td>2007-12-12</td>
+                    <td>8.18367658262066</td>
+                  </tr>
+                </tbody>
+              </table>
+          </div>
+        </div>
+
+        <div class="col s12 m5">
+          <div class="icon-block">
+            <h2 class="center brown-text"><i class="material-icons">settings</i></h2>
+            <h5 class="center">Configure Seasonalities</h5>
+            <div class="switch center">
+                <label>
+                  Weekly
+                  <input id="seasonality" onchange="printSeasonality()" type="checkbox">
+                  <span class="lever"></span>
+                  Monthly
+                </label>
+              </div>
+
+                  <div class="card blue-grey darken-1">
+                    <div class="card-content white-text">
+                      <span class="card-title center">Configuration:</span>
+                      <code id="seasonalityConfig"> {
+                          "name":"weekly",
+                          "period": 7,
+                          "fourier_order": 5,
+                        }
+                        </code>
+                    </div>
+                  </div>
+          </div>
+        </div>
+
+        <div class="col s12 m4">
+          <div class="icon-block center">
+            <h2 class="center brown-text"><i class="material-icons">play_arrow</i></h2>
+            <!-- <h5 class="center">Get Predictions</h5> -->
+            <a class="waves-effect waves-light btn" onclick="getPrediction()">Get Predictions</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+
+
+  <div class="parallax-container valign-wrapper">
+    <div class="section no-pad-bot">
+      <div class="container">
+        <div class="row center">
+         
+        </div>
+      </div>
+    </div>
+    <div class="parallax"><img src="vectorpaint.svg" alt="Unsplashed background img 2"></div>
+  </div>
+
+  <div class="container">
+    <div class="section">
+
+      <div class="row">
+        <div class="col s12 center">
+          <h4>Prediction:</h4>
+          <code style="display:block;white-space:pre-wrap" id="response_example"></code>
+          <div id="chart"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+  <div class="parallax-container valign-wrapper">
+    <div class="section no-pad-bot">
+      <div class="container">
+        <div class="row center">
+          
+        </div>
+      </div>
+    </div>
+    <div class="parallax"><img src="vectorpaint.svg" alt="Unsplashed background img 3"></div>
+  </div>
+
+
+
+  <!--  Scripts-->
+  <script src="js/jquery.js"></script>
+  <script src="js/moment.js"></script>
+  <script src="js/highcharts.js"></script>
+  <script src="js/lodash.js"></script>
+  <script src="js/axios.js"></script>
+  <script src="js/materialize.js"></script>
+  <script src="js/init.js"></script>
+<script>
+
+    function printSeasonality(){
+        let checked =$("#seasonality").is(':checked');
+        console.log(checked);
+        $("#seasonalityConfig").text(getSeasonalityConfigurationString(checked));
+    }
+    function getSeasonalityConfigurationString(checked){
+        return (checked)?`
+        {
+            "name":"monthly",
+            "period": 30.5,
+            "fourier_order": 7,
+          }`:`
+        {
+            "name":"weekly",
+            "period": 7,
+            "fourier_order": 5,
+          }`
+    }
+    function getSeasonalityConfiguration(checked){
+        return (checked)?
+        {
+            "name":"monthly",
+            "period": 30.5,
+            "fourier_order": 7,
+          }:
+        {
+            "name":"weekly",
+            "period": 7,
+            "fourier_order": 5,
+          }
+    }
+    function getPrediction(){
+        let checked =$("#seasonality").is(':checked');
+        seasonalities =[getSeasonalityConfiguration(checked)];
+        let data =getData();
+        let payload ={
+            data:data,
+            seasonalities:seasonalities,
+            only_predictions:false
+        };
+
+        axios.post("/",payload).then(function(resp){
+            let forecast =resp.data.forecast
+            console.log(forecast);
+            let example_forecast = JSON.stringify(forecast[0]).split(",").join(",\n")
+            $("#response_example").text(example_forecast);
+            drawChart(forecast);
+        })
+    }
+
+    function drawChart(data){
+        let predictionSeries = {name:"yhat",data:_.map(data,function(sample){
+            return [moment(sample.ds).toDate(),sample.yhat]
+        })};
+        let trendSeries ={name:"trend",data:_.map(data,function(sample){
+            return [moment(sample.ds).toDate(),sample.trend]
+        })};
+        let realSeries ={name:"y",data:_.map(getData(),function(sample){
+            return [moment(sample.ds).toDate(),sample.y]
+        })};
+        let isWeekly = data[0].weekly;
+        let seasonality = isWeekly?"weekly":"monthly";
+        let seasonalitySeries = {name:seasonality,data:_.map(data,function(sample){
+            return [moment(sample.ds).toDate(),sample[seasonality]]
+        })};
+        console.log(predictionSeries);
+        Highcharts.chart('chart', {
+            chart: {
+                zoomType: 'x'
+            },
+            title: {
+                text: 'Returned Values from Alakazam/FBProphet'
+            },
+        
+        
+            xAxis: {
+                type: 'datetime'
+            },
+            legend: {
+                layout: 'vertical',
+                align: 'right',
+                verticalAlign: 'middle'
+            },
+        
+            plotOptions: {
+                series: {
+                    label: {
+                        connectorAllowed: false
+                    },
+                }
+            },
+        
+            series: [
+            predictionSeries,
+            realSeries,
+            seasonalitySeries,
+            trendSeries,
+            /*{
+                name: 'Installation',
+                data: [43934, 52503, 57177, 69658, 97031, 119931, 137133, 154175]
+            }, {
+                name: 'Manufacturing',
+                data: [24916, 24064, 29742, 29851, 32490, 30282, 38121, 40434]
+            }, {
+                name: 'Sales & Distribution',
+                data: [11744, 17722, 16005, 19771, 20185, 24377, 32147, 39387]
+            }, {
+                name: 'Project Development',
+                data: [null, null, 7988, 12169, 15112, 22452, 34400, 34227]
+            }, {
+                name: 'Other',
+                data: [12908, 5948, 8105, 11248, 8989, 11816, 18274, 18111]
+            }*/],
+        
+            responsive: {
+                rules: [{
+                    condition: {
+                        maxWidth: 500
+                    },
+                    chartOptions: {
+                        legend: {
+                            layout: 'horizontal',
+                            align: 'center',
+                            verticalAlign: 'bottom'
+                        }
+                    }
+                }]
+            }
+        
+        });
+    }
+</script>
+  </body>
+</html>
