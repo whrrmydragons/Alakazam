@@ -1,0 +1,29 @@
+
+    <! doctype html>
+    <html>
+    <head>
+    <link type="text/css" rel="stylesheet" href="css/swagger-ui.css">
+    <link rel="shortcut icon" href="favicon.png">
+    <title>Fast API - Swagger UI</title>
+    </head>
+    <body>
+    <div id="swagger-ui">
+    </div>
+    <script src="js/swagger-ui.js"></script>
+    <!-- `SwaggerUIBundle` is now available on the page -->
+    <script>
+    const ui = SwaggerUIBundle({
+        url: '/openapi.json',
+    oauth2RedirectUrl: window.location.origin + '/docs/oauth2-redirect',
+        dom_id: '#swagger-ui',
+        presets: [
+        SwaggerUIBundle.presets.apis,
+        SwaggerUIBundle.SwaggerUIStandalonePreset
+        ],
+        layout: "BaseLayout",
+        deepLinking: true
+    })
+    </script>
+    </body>
+    </html>
+    
