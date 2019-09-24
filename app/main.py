@@ -35,6 +35,9 @@ class Predict(BaseModel):
     floor: int = 0
     only_predictions: bool  = True
     disable_diagnosis: bool = True
+    #If the trend changes are being overfit (too much flexibility) or underfit (not enough flexibility), you can adjust the strength of the sparse prior using the input argument changepoint_prior_scale. By default, this parameter is set to 0.05. Increasing it will make the trend more flexible:
+    #https://facebook.github.io/prophet/docs/trend_changepoints.html#adjusting-trend-flexibility
+    changepoint_prior_scale: float = 0.05
 
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="app/static"), name="static")
@@ -62,6 +65,7 @@ async def predict(body:Predict):
     holidays = createHolidays(body.holidays)
     seasonalities = body.seasonalities
     floor = body.floor
+    changepoint_prior_scale = body.changepoint_prior_scale
 
     #flag to disableDiagnosis
     disable_diagnosis = body.disable_diagnosis 
@@ -70,7 +74,7 @@ async def predict(body:Predict):
     # #set floor
     df['floor'] = floor
     #instinciate model
-    m = initializeModel(holidays)
+    m = initializeModel(holidays,changepoint_prior_scale)
     # #if provided seasonalitied add them to the model before calling fit
     addSeasonalities(m,seasonalities)
     # #train/fit the model
@@ -109,9 +113,9 @@ def addSeasonalities(m,seasonalities):
         period = seasonality.period
         fourier_order = seasonality.fourier_order
         m.add_seasonality(name=name, period=period, fourier_order=fourier_order)
-def initializeModel(holidays):
+def initializeModel(holidays,changepoint_prior_scale):
     if len(holidays)>0:
-        return Prophet(daily_seasonality=False,yearly_seasonality=False,weekly_seasonality=False,holidays=holidays) 
+        return Prophet(changepoint_prior_scale=changepoint_prior_scale,daily_seasonality=False,yearly_seasonality=False,weekly_seasonality=False,holidays=holidays) 
     else:
-        return Prophet(daily_seasonality=False,yearly_seasonality=False,weekly_seasonality=False)
+        return Prophet(changepoint_prior_scale=changepoint_prior_scale,daily_seasonality=False,yearly_seasonality=False,weekly_seasonality=False)
     
