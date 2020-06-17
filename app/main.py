@@ -40,7 +40,7 @@ class Predict(BaseModel):
     changepoint_prior_scale: float = 0.05
 
 app = FastAPI()
-app.mount("/static", StaticFiles(directory="app/static"), name="static")
+app.mount("/static", StaticFiles(directory="./static"), name="static")
 
 @app.get("/")
 async def alakazam():
