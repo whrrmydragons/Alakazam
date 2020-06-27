@@ -1,4 +1,3 @@
 aiofiles
 fbprophet
 pandas
-plotly
