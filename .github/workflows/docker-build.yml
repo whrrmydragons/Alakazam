@@ -1,15 +1,19 @@
 on:
   push:
   pull_request:
-steps:
-  - uses: actions/checkout@v1.0
-    name: Check out code
 
-  - uses: docker/build-push-action@v1.1.0
-    name: Build and push Docker images
-    with:
-      username: ${{ secrets.DOCKER_USERNAME }}
-      password: ${{ secrets.DOCKER_PASSWORD }}
-      repository: omrihaber/alakazam
-      tag_with_ref: true
-      tag_with_sha: true
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1.0
+        name: Check out code
+
+      - uses: docker/build-push-action@v1.1.0
+        name: Build and push Docker images
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+          repository: omrihaber/alakazam
+          tag_with_ref: true
+          tag_with_sha: true
